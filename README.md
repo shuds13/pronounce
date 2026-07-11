@@ -20,12 +20,6 @@ data for all websites", no downloads, no tabs access.
 - Audio plays from the extension's background page, not the web page, so it is
   unaffected by a site's Content-Security-Policy (works on Wikipedia, etc.).
 
-## Permissions
-
-Installs with no permission prompt — nothing for users to approve. It uses only
-`contextMenus`, `activeTab`, and `scripting`, and requests no access to your
-data on websites, downloads, or tabs.
-
 ## Run from source
 
 1. Open `about:debugging` in Firefox → **This Firefox**
