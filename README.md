@@ -1,7 +1,7 @@
 # Pronounce
 
-A minimal Firefox extension: right-click any selected word or name to hear it
-pronounced with Google's text-to-speech voice.
+A minimal Firefox extension: select a word or name, right-click, and choose
+Pronounce to hear it spoken.
 
 Built as a lightweight alternative to pronunciation add-ons that demand broad
 permissions. Pronounce requests **none of the scary ones** — no "access your

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Pronounce",
   "version": "1.0.0",
-  "description": "Right-click any selected word or name to hear it pronounced with Google's voice. Works on any text, no broad permissions.",
+  "description": "Select a word or name, right-click, and choose Pronounce to hear it spoken. No broad permissions.",
   "icons": {
     "48": "icons/icon-48.png",
     "96": "icons/icon-96.png"
