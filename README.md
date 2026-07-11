@@ -3,6 +3,8 @@
 A minimal Firefox extension: select a word or name, right-click, and choose
 Pronounce to hear it spoken.
 
+**Install:** https://addons.mozilla.org/en-US/firefox/addon/pronounce/
+
 Built as a lightweight alternative to pronunciation add-ons that demand broad
 permissions. Pronounce requests **none of the scary ones** — no "access your
 data for all websites", no downloads, no tabs access.
@@ -20,22 +22,14 @@ data for all websites", no downloads, no tabs access.
 
 ## Permissions
 
-| Permission    | Why                                                    |
-|---------------|--------------------------------------------------------|
-| `contextMenus`| Adds the right-click "Pronounce" item                  |
-| `activeTab`   | Access to the current tab, only on your click          |
-| `scripting`   | Draws the small confirmation tooltip on that tab       |
+Installs with no permission prompt — nothing for users to approve. It uses only
+`contextMenus`, `activeTab`, and `scripting`, and requests no access to your
+data on websites, downloads, or tabs.
 
-No host permissions are requested.
-
-## Install (temporary, for development)
+## Run from source
 
 1. Open `about:debugging` in Firefox → **This Firefox**
 2. **Load Temporary Add-on…** → select `manifest.json`
-3. Select a word or name on any page → right-click → **Pronounce "…"**
-
-Temporary add-ons are removed when Firefox restarts. For a permanent install,
-the package must be signed via [addons.mozilla.org](https://addons.mozilla.org).
 
 ## Files
 
@@ -43,9 +37,3 @@ the package must be signed via [addons.mozilla.org](https://addons.mozilla.org).
 - `background.js` — context menu, TTS playback, tooltip injection
 - `popup.html` / `popup.js` — toolbar popup with instructions and type-to-hear box
 - `icons/` — toolbar/listing icons
-
-## Note
-
-This uses Google Translate's unofficial TTS endpoint, which has no formal
-support guarantee and may rate-limit or change. The built-in speech-synthesis
-fallback keeps the extension functional if that happens.
