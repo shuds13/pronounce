@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Pronounce",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Select a word or name, right-click, and choose Pronounce to hear it spoken. No broad permissions.",
   "icons": {
     "16": "icons/icon-16.png",
