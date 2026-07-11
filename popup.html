@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      width: 260px;
+      margin: 0;
+      padding: 14px;
+      background: #1e1e2e;
+      color: #eaeaea;
+      font: 13px/1.45 system-ui, sans-serif;
+    }
+    h1 { margin: 0 0 6px; font-size: 15px; }
+    p  { margin: 0 0 12px; color: #c8c8d4; }
+    .row { display: flex; gap: 6px; }
+    input {
+      flex: 1;
+      padding: 7px 9px;
+      border: 1px solid #3a3a52;
+      border-radius: 8px;
+      background: #14141f;
+      color: #eaeaea;
+      font: inherit;
+    }
+    input:focus { outline: none; border-color: #7aa2f7; }
+    button {
+      border: none;
+      border-radius: 8px;
+      background: #7aa2f7;
+      color: #14141f;
+      font-size: 15px;
+      padding: 0 11px;
+      cursor: pointer;
+    }
+    button:hover { background: #93b4ff; }
+  </style>
+</head>
+<body>
+  <h1>Pronounce</h1>
+  <p>Select a word or name on any page, right-click, and choose
+     <b>Pronounce&nbsp;"…"</b> to hear it.</p>
+  <div class="row">
+    <input id="q" placeholder="…or type a word or name" autocomplete="off" />
+    <button id="say" title="Play">🔊</button>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
