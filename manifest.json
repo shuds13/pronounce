@@ -4,8 +4,11 @@
   "version": "1.0.0",
   "description": "Select a word or name, right-click, and choose Pronounce to hear it spoken. No broad permissions.",
   "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
     "48": "icons/icon-48.png",
-    "96": "icons/icon-96.png"
+    "96": "icons/icon-96.png",
+    "128": "icons/icon-128.png"
   },
   "permissions": [
     "contextMenus",
@@ -16,8 +19,9 @@
     "default_title": "Pronounce",
     "default_popup": "popup.html",
     "default_icon": {
-      "48": "icons/icon-48.png",
-      "96": "icons/icon-96.png"
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png"
     }
   },
   "background": {
