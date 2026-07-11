@@ -10,7 +10,9 @@ data for all websites", no downloads, no tabs access.
 ## How it works
 
 - Adds a single context-menu item, `Pronounce "…"`, on text selections.
-- Speaks the selection using Google Translate's TTS endpoint, so it pronounces
+- Or click the toolbar button and type any word or name into the box to hear it,
+  without selecting anything on the page.
+- Speaks the text using Google Translate's TTS endpoint, so it pronounces
   **any** string — real words *and* proper names (e.g. "Clemenceau").
 - Falls back to the browser's built-in speech synthesis if the network voice is
   unavailable.
@@ -40,6 +42,7 @@ the package must be signed via [addons.mozilla.org](https://addons.mozilla.org).
 
 - `manifest.json` — MV3 manifest
 - `background.js` — context menu, TTS playback, tooltip injection
+- `popup.html` / `popup.js` — toolbar popup with instructions and type-to-hear box
 - `icons/` — toolbar/listing icons
 
 ## Note
