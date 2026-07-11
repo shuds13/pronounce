@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Pronounce",
+  "version": "1.0.0",
+  "description": "Right-click any selected word or name to hear it pronounced with Google's voice. Works on any text, no broad permissions.",
+  "icons": {
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png"
+  },
+  "permissions": [
+    "contextMenus",
+    "activeTab",
+    "scripting"
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "pronounce@shuds13.local",
+      "strict_min_version": "121.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  }
+}
