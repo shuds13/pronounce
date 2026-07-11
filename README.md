@@ -10,8 +10,7 @@ data for all websites", no downloads, no tabs access.
 ## How it works
 
 - Adds a single context-menu item, `Pronounce "…"`, on text selections.
-- Or click the toolbar button and type any word or name into the box to hear it,
-  without selecting anything on the page.
+- Or click the toolbar button and type any word or name into the box to hear it.
 - Speaks the text using Google Translate's TTS endpoint, so it pronounces
   **any** string — real words *and* proper names (e.g. "Clemenceau").
 - Falls back to the browser's built-in speech synthesis if the network voice is
