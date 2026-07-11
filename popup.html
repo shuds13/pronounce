@@ -26,15 +26,17 @@
     }
     input:focus { outline: none; border-color: #7aa2f7; }
     button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
       border: none;
       border-radius: 8px;
       background: #7aa2f7;
-      color: #14141f;
-      font-size: 15px;
-      padding: 0 11px;
       cursor: pointer;
     }
     button:hover { background: #93b4ff; }
+    button svg { width: 26px; height: 26px; display: block; }
   </style>
 </head>
 <body>
@@ -43,7 +45,15 @@
      <b>Pronounce&nbsp;"…"</b> to hear it.</p>
   <div class="row">
     <input id="q" placeholder="…or type a word or name" autocomplete="off" />
-    <button id="say" title="Play">🔊</button>
+    <button id="say" title="Play">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 9h3.3l4.7-4v14l-4.7-4H4z" fill="#14141f" />
+        <path d="M15 8.4a4.6 4.6 0 0 1 0 7.2" fill="none" stroke="#14141f"
+              stroke-width="1.9" stroke-linecap="round" />
+        <path d="M17.8 5.8a8.2 8.2 0 0 1 0 12.4" fill="none" stroke="#14141f"
+              stroke-width="1.9" stroke-linecap="round" />
+      </svg>
+    </button>
   </div>
   <script src="popup.js"></script>
 </body>
