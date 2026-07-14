@@ -1,5 +1,5 @@
-// Toolbar popup: type-and-hear box. Runs in the extension's own page context,
-// so it can play audio directly (no page CSP, real user gesture on click).
+// Toolbar popup: type-and-hear box + a "Search Google" link. Uses the shared
+// pronounce() resolver (speak.js) and shows which source produced the audio.
 
 const MAX_LEN = 200;
 
@@ -7,30 +7,35 @@ function clean(s) {
   return (s || "").trim().replace(/\s+/g, " ").slice(0, MAX_LEN);
 }
 
-function speak(text) {
-  if (!text) return;
-  const url =
-    "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=" +
-    encodeURIComponent(text);
-  const audio = new Audio(url);
-  audio.addEventListener("error", () => fallback(text));
-  audio.play().catch(() => fallback(text));
-}
-
-function fallback(text) {
-  try {
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "en-US";
-    speechSynthesis.speak(u);
-  } catch (_) {}
-}
-
 const q = document.getElementById("q");
 const say = document.getElementById("say");
+const src = document.getElementById("src");
+const gsearch = document.getElementById("gsearch");
 
-say.addEventListener("click", () => speak(clean(q.value)));
+function go() {
+  const text = clean(q.value);
+  if (!text) return;
+  src.textContent = "…";
+  pronounce(text).then((code) => {
+    src.textContent = code ? "source: " + sourceLabel(code) : "";
+  });
+}
+
+say.addEventListener("click", go);
 q.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") speak(clean(q.value));
+  if (e.key === "Enter") go();
 });
+
+gsearch.addEventListener("click", () => {
+  const text = clean(q.value);
+  if (!text) {
+    q.focus();
+    return;
+  }
+  const url =
+    "https://www.google.com/search?q=" +
+    encodeURIComponent("pronounce " + text);
+  chrome.tabs.create({ url });
+});
+
 q.focus();

@@ -1,17 +1,12 @@
 // Pronounce — background event page (Firefox MV3)
 //
-// Speaks the selected text using Google Translate's TTS voice (handles any
-// word OR name, e.g. "Clemenceau"), with the browser's built-in speech
-// synthesis as an automatic fallback if the network voice is unavailable.
-//
-// All audio is played here in the background page — NOT in the web page — so
-// it is immune to the page's Content-Security-Policy (which is what broke the
-// old in-page approach on sites like Wikipedia). Playing audio via an <audio>
-// element needs no host permission, so the extension still requests no broad
-// permissions: only contextMenus, activeTab, and scripting.
+// Adds the right-click "Pronounce" item, resolves audio via the shared
+// pronounce() helper (see speak.js), and shows a small card noting which source
+// was used. All audio plays here in the background page (immune to page CSP),
+// and dictionary lookups go over CORS, so no host permissions are needed.
 
 const MENU_ID = "pronounce-selection";
-const MAX_LEN = 200; // Google TTS endpoint rejects very long strings
+const MAX_LEN = 200;
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
@@ -26,48 +21,46 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   const text = clean(info.selectionText);
   if (!text) return;
 
-  speak(text);
-
-  // activeTab grants access to this tab for this user gesture — used only to
-  // draw the little confirmation tooltip and offer a replay button.
   chrome.scripting.executeScript({
     target: { tabId: tab.id },
     func: showTip,
     args: [text],
   });
+  pronounce(text).then((code) => setTipSource(tab.id, sourceLabel(code)));
 });
 
-// Replay button inside the injected tooltip asks the background to speak again.
-chrome.runtime.onMessage.addListener((msg) => {
-  if (msg?.type === "pronounce" && msg.text) speak(clean(msg.text));
+// Replay button inside the injected card asks the background to speak again.
+chrome.runtime.onMessage.addListener((msg, sender) => {
+  if (msg?.type === "pronounce" && msg.text) {
+    pronounce(clean(msg.text)).then((code) => {
+      if (sender.tab?.id) setTipSource(sender.tab.id, sourceLabel(code));
+    });
+  } else if (msg?.type === "gsearch" && msg.text) {
+    chrome.tabs.create({
+      url:
+        "https://www.google.com/search?q=" +
+        encodeURIComponent("pronounce " + clean(msg.text)),
+    });
+  }
 });
 
 function clean(s) {
   return (s || "").trim().replace(/\s+/g, " ").slice(0, MAX_LEN);
 }
 
-function speak(text) {
-  const url =
-    "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=" +
-    encodeURIComponent(text);
-  const audio = new Audio(url);
-  audio.addEventListener("error", () => speechFallback(text));
-  audio.play().catch(() => speechFallback(text));
+function setTipSource(tabId, label) {
+  chrome.scripting.executeScript({
+    target: { tabId },
+    func: (l) => {
+      const n = document.getElementById("__pronounce_src__");
+      if (n) n.textContent = "source: " + l;
+    },
+    args: [label],
+  });
 }
 
-// Offline / no-network fallback: the browser's own speech synthesis. Also
-// pronounces any string, though with the OS voice rather than Google's.
-function speechFallback(text) {
-  try {
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "en-US";
-    speechSynthesis.speak(u);
-  } catch (_) {}
-}
-
-// Injected into the active page: draws a small dismissable card with the text
-// and a replay button. Pure DOM/style work, so it is CSP-safe on every site.
+// Injected into the active page: a small dismissable card with the text, a
+// replay button, and a line showing which audio source was used.
 function showTip(text) {
   const old = document.getElementById("__pronounce_tip__");
   if (old) old.remove();
@@ -91,26 +84,43 @@ function showTip(text) {
     font: "14px/1.4 system-ui, sans-serif",
     borderRadius: "10px",
     boxShadow: "0 6px 24px rgba(0,0,0,.35)",
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
     cursor: "default",
   });
   tip.setAttribute("role", "status");
 
-  tip.append(el("span", { textContent: "🔊 " + text }));
+  const row = el("div", null, { display: "flex", alignItems: "center", gap: "8px" });
+  row.append(el("span", { textContent: "🔊 " + text }, { flex: "1" }));
 
   const btn = el("button", { title: "Play again", textContent: "↻" }, {
     all: "unset", cursor: "pointer", fontSize: "16px", padding: "2px 6px",
   });
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
+    const s = document.getElementById("__pronounce_src__");
+    if (s) s.textContent = "…";
     chrome.runtime.sendMessage({ type: "pronounce", text });
   });
-  tip.append(btn);
+  row.append(btn);
+  tip.append(row);
+
+  tip.append(
+    el("span", { id: "__pronounce_src__", textContent: "…" }, {
+      display: "block", marginTop: "3px", fontSize: "11px", opacity: ".6",
+    })
+  );
+
+  const gs = el("button", { textContent: "Search Google ↗", title: "Search Google for pronunciation" }, {
+    all: "unset", cursor: "pointer", display: "block", marginTop: "6px",
+    fontSize: "11px", color: "#7aa2f7", textDecoration: "underline",
+  });
+  gs.addEventListener("click", (e) => {
+    e.stopPropagation();
+    chrome.runtime.sendMessage({ type: "gsearch", text });
+  });
+  tip.append(gs);
 
   document.body.appendChild(tip);
   const dismiss = () => tip.remove();
-  setTimeout(dismiss, 5000);
+  setTimeout(dismiss, 6000);
   tip.addEventListener("click", (e) => { if (e.target !== btn) dismiss(); });
 }

@@ -25,7 +25,7 @@
       font: inherit;
     }
     input:focus { outline: none; border-color: #7aa2f7; }
-    button {
+    #say {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -35,8 +35,21 @@
       background: #7aa2f7;
       cursor: pointer;
     }
-    button:hover { background: #93b4ff; }
-    button svg { width: 26px; height: 26px; display: block; }
+    #say:hover { background: #93b4ff; }
+    #say svg { width: 26px; height: 26px; display: block; }
+    .link {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 0;
+      border: none;
+      background: none;
+      color: #7aa2f7;
+      font: inherit;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .link:hover { color: #93b4ff; }
+    .src { margin-top: 8px; min-height: 15px; font-size: 11px; color: #9a9ab0; }
   </style>
 </head>
 <body>
@@ -55,6 +68,9 @@
       </svg>
     </button>
   </div>
+  <button id="gsearch" class="link" type="button">Search Google for pronunciation ↗</button>
+  <div id="src" class="src"></div>
+  <script src="speak.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>
