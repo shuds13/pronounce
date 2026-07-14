@@ -39,7 +39,7 @@ chrome.runtime.onMessage.addListener((msg, sender) => {
     chrome.tabs.create({
       url:
         "https://www.google.com/search?q=" +
-        encodeURIComponent("pronounce " + clean(msg.text)),
+        encodeURIComponent('pronounce "' + clean(msg.text) + '"'),
     });
   }
 });

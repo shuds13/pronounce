@@ -34,7 +34,7 @@ gsearch.addEventListener("click", () => {
   }
   const url =
     "https://www.google.com/search?q=" +
-    encodeURIComponent("pronounce " + text);
+    encodeURIComponent('pronounce "' + text + '"');
   chrome.tabs.create({ url });
 });
 
